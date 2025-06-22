@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
+      - SQLALCHEMY_DATABASE_URL=sqlite:///./flowers.db
+    volumes:
+      # Mount the database file for persistence
+      - ./flowers.db:/app/flowers.db
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Add a database service if you want to use PostgreSQL later
+  # postgres:
+  #   image: postgres:15
+  #   environment:
+  #     POSTGRES_DB: zengarden
+  #     POSTGRES_USER: zengarden_user
+  #     POSTGRES_PASSWORD: zengarden_password
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+
+# volumes:
+#   postgres_data: 
