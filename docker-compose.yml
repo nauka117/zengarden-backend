@@ -10,7 +10,7 @@ services:
       - SQLALCHEMY_DATABASE_URL=sqlite:///./flowers.db
     volumes:
       # Mount the database file for persistence
-      - ./flowers.db:/app/flowers.db
+      - database_data:/app
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
@@ -18,6 +18,9 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+
+volumes:
+  database_data:
 
   # Optional: Add a database service if you want to use PostgreSQL later
   # postgres:
