@@ -1,165 +1,254 @@
-# Zen Garden Backend
+# ZenGarden Backend
 
-A FastAPI-based backend service for flower planning and management.
+Backend-сервис для планирования и управления цветочным садом, построенный на FastAPI.
 
-## Features
+## 🚀 Возможности
 
-- FastAPI REST API
-- SQLAlchemy ORM with SQLite database
-- JWT authentication
-- CORS support
-- Docker containerization ready
+- **FastAPI REST API** - современный и быстрый веб-фреймворк
+- **SQLAlchemy ORM** с SQLite базой данных
+- **JWT аутентификация** для безопасного доступа
+- **CORS поддержка** для веб-приложений
+- **Docker контейнеризация** для простого развертывания
+- **Автоматическая документация API** (Swagger UI)
 
-## Quick Start
+## 🛠 Быстрый старт
 
-### Option 1: Docker (Recommended)
+### Вариант 1: Docker (Рекомендуется)
 
-1. **Build and run with Docker Compose:**
+1. **Сборка и запуск с Docker Compose:**
    ```bash
    docker-compose up --build
    ```
 
-2. **Or build and run with Docker directly:**
+2. **Или сборка и запуск с Docker напрямую:**
    ```bash
    docker build -t zengarden-backend .
    docker run -p 8000:8000 zengarden-backend
    ```
 
-3. **Access the API:**
+3. **Доступ к API:**
    - API: http://localhost:8000
-   - Documentation: http://localhost:8000/docs
-   - Health check: http://localhost:8000/health
+   - Документация: http://localhost:8000/docs
+   - Проверка здоровья: http://localhost:8000/health
 
-### Option 2: Local Development
+### Вариант 2: Локальная разработка
 
-1. **Create virtual environment:**
+1. **Создание виртуального окружения:**
    ```bash
-   # For bash/zsh
+   # Для bash/zsh
    python -m venv .venv
    source .venv/bin/activate
    
-   # For fish shell
+   # Для fish shell
    python -m venv .venv
    source .venv/bin/activate.fish
    ```
 
-2. **Install dependencies:**
+2. **Установка зависимостей:**
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Run the application:**
+3. **Запуск приложения:**
    ```bash
    uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
    ```
 
-## Development Setup
+## 🔧 Настройка разработки
 
-1. **Install development dependencies:**
+1. **Установка зависимостей для разработки:**
    ```bash
    pip install -r requirements-dev.txt
    ```
 
-2. **Run tests:**
+2. **Запуск тестов:**
    ```bash
    pytest
    ```
 
-3. **Format code:**
+3. **Форматирование кода:**
    ```bash
    black .
    ```
 
-4. **Lint code:**
+4. **Проверка кода:**
    ```bash
    flake8 .
    ```
 
-## API Endpoints
+## 📡 API Endpoints
 
-- `GET /health` - Health check
-- `GET /api/v1/` - API root
-- `POST /api/v1/auth/login` - User login
-- `GET /api/v1/flowers` - Get flowers
-- `POST /api/v1/flowers` - Create flower
+- `GET /health` - Проверка состояния сервиса
+- `GET /api/v1/` - Корень API
+- `POST /api/v1/auth/login` - Авторизация пользователя
+- `GET /api/v1/flowers` - Получение списка цветов
+- `POST /api/v1/flowers` - Создание нового цветка
 
-## Environment Variables
+## 🔐 Переменные окружения
 
-The application uses the following environment variables (with defaults):
+Приложение использует следующие переменные окружения (с значениями по умолчанию):
 
-- `SECRET_KEY`: JWT secret key (default: "your-secret-key-keep-it-secret")
-- `ALGORITHM`: JWT algorithm (default: "HS256")
-- `ACCESS_TOKEN_EXPIRE_MINUTES`: Token expiration (default: 30)
-- `SQLALCHEMY_DATABASE_URL`: Database URL (default: "sqlite:///./flowers.db")
+- `SECRET_KEY`: Секретный ключ для JWT (по умолчанию: "your-secret-key-keep-it-secret")
+- `ALGORITHM`: Алгоритм JWT (по умолчанию: "HS256")
+- `ACCESS_TOKEN_EXPIRE_MINUTES`: Время жизни токена в минутах (по умолчанию: 30)
+- `SQLALCHEMY_DATABASE_URL`: URL базы данных (по умолчанию: "sqlite:///./data/flowers.db")
 
-## Troubleshooting
+## 🚀 Развертывание на сервере
 
-### IDE Package Installation Issues
+### Подготовка сервера
 
-If your IDE fails to install packages automatically:
+1. Убедитесь, что на сервере установлен Docker и Docker Compose
+2. Склонируйте репозиторий на сервер
 
-1. **Ensure you're using the correct Python interpreter:**
-   - Point your IDE to `.venv/bin/python`
-   - For VS Code: `Ctrl+Shift+P` → "Python: Select Interpreter" → Choose `.venv/bin/python`
+### Процесс развертывания
 
-2. **For fish shell users:**
-   - Use `source .venv/bin/activate.fish` instead of `source .venv/bin/activate`
-   - Some IDEs may need manual configuration for fish shell
-
-3. **Manual installation:**
+1. **Остановите существующие контейнеры (если есть):**
    ```bash
-   source .venv/bin/activate.fish  # or activate for bash
+   docker compose down
+   ```
+
+2. **Пересоберите образ без кэша:**
+   ```bash
+   docker compose build --no-cache
+   ```
+
+3. **Запустите приложение:**
+   ```bash
+   docker compose up -d
+   ```
+
+4. **Проверьте логи:**
+   ```bash
+   docker compose logs -f api
+   ```
+
+### Проверка работы
+
+1. Проверьте health check: `curl http://localhost:8000/health`
+2. Откройте SwaggerUI: `http://your-server-ip:8000/docs`
+3. Попробуйте авторизоваться с пользователем `111` и паролем `111`
+
+### Обновление приложения
+
+Для обновления кода:
+1. Остановите контейнеры: `docker compose down`
+2. Обновите код в директории `./app`
+3. Перезапустите: `docker compose up -d`
+
+База данных сохранится в volume и не будет потеряна.
+
+## 🐛 Устранение проблем
+
+### Проблемы с IDE
+
+Если IDE не может автоматически установить пакеты:
+
+1. **Убедитесь, что используется правильный Python интерпретатор:**
+   - Укажите IDE путь к `.venv/bin/python`
+   - Для VS Code: `Ctrl+Shift+P` → "Python: Select Interpreter" → Выберите `.venv/bin/python`
+
+2. **Для пользователей fish shell:**
+   - Используйте `source .venv/bin/activate.fish` вместо `source .venv/bin/activate`
+   - Некоторые IDE могут требовать ручной настройки для fish shell
+
+3. **Ручная установка:**
+   ```bash
+   source .venv/bin/activate.fish  # или activate для bash
    pip install -r requirements.txt
    ```
 
-### Docker Issues
+### Проблемы с Docker
 
-1. **Build fails:**
-   - Ensure Docker is running
-   - Check if all files are present (Dockerfile, requirements.txt)
-   - Try `docker system prune` to clear cache
+1. **Ошибка сборки:**
+   - Убедитесь, что Docker запущен
+   - Проверьте наличие всех файлов (Dockerfile, requirements.txt)
+   - Попробуйте `docker system prune` для очистки кэша
 
-2. **Port conflicts:**
-   - Change the port in docker-compose.yml if 8000 is already in use
-   - Use `docker-compose up -p 8001` to use a different port
+2. **Конфликты портов:**
+   - Измените порт в docker-compose.yml, если 8000 уже занят
+   - Используйте `docker-compose up -p 8001` для использования другого порта
 
-3. **Database issues:**
-   - The SQLite database file is mounted as a volume
-   - Ensure the file has proper permissions
+3. **Проблемы с базой данных:**
+   - Файл SQLite базы данных монтируется как volume
+   - Убедитесь, что файл имеет правильные права доступа
 
-## Production Deployment
+### Проблема с правами доступа к базе данных
 
-For production deployment:
+Если возникает ошибка "unable to open database file":
+1. Остановите контейнеры: `docker compose down`
+2. Удалите volume: `docker volume rm zengarden-backend_database_data`
+3. Пересоберите и запустите заново
 
-1. **Use environment variables for secrets:**
-   ```bash
-   export SECRET_KEY="your-production-secret-key"
-   export SQLALCHEMY_DATABASE_URL="postgresql://user:pass@host/db"
-   ```
-
-2. **Consider using PostgreSQL instead of SQLite:**
-   - Uncomment the postgres service in docker-compose.yml
-   - Update the database URL
-
-3. **Add proper CORS origins:**
-   - Update the CORS configuration in `app/main.py`
-
-4. **Use a reverse proxy (nginx) for production**
-
-## Project Structure
+## 🏗 Структура проекта
 
 ```
 zengarden-backend/
 ├── app/
 │   ├── api/v1/          # API endpoints
-│   ├── core/            # Configuration and security
-│   ├── db/              # Database setup
-│   ├── models/          # SQLAlchemy models
-│   ├── schemas/         # Pydantic schemas
-│   └── main.py          # FastAPI application
-├── Dockerfile           # Docker configuration
-├── docker-compose.yml   # Docker Compose setup
-├── requirements.txt     # Production dependencies
-├── requirements-dev.txt # Development dependencies
-└── README.md           # This file
+│   ├── core/            # Конфигурация и безопасность
+│   ├── db/              # Настройка базы данных
+│   ├── models/          # SQLAlchemy модели
+│   ├── schemas/         # Pydantic схемы
+│   └── main.py          # FastAPI приложение
+├── Dockerfile           # Docker конфигурация
+├── docker-compose.yml   # Docker Compose настройка
+├── requirements.txt     # Продакшн зависимости
+├── requirements-dev.txt # Зависимости для разработки
+└── README.md           # Этот файл
 ```
+
+## 🔒 Продакшн настройки
+
+Для продакшн развертывания:
+
+1. **Используйте переменные окружения для секретов:**
+   ```bash
+   export SECRET_KEY="your-production-secret-key"
+   export SQLALCHEMY_DATABASE_URL="postgresql://user:pass@host/db"
+   ```
+
+2. **Рассмотрите использование PostgreSQL вместо SQLite:**
+   - Раскомментируйте postgres сервис в docker-compose.yml
+   - Обновите URL базы данных
+
+3. **Добавьте правильные CORS origins:**
+   - Обновите CORS конфигурацию в `app/main.py`
+
+4. **Используйте reverse proxy (nginx) для продакшна**
+
+## 📝 Тестирование
+
+### Быстрая проверка настройки
+
+```bash
+# 1. Убедитесь в правильном Python интерпретаторе
+which python  # Должен указывать на .venv/bin/python
+
+# 2. Переустановите пакеты при необходимости
+source .venv/bin/activate.fish
+pip install -r requirements.txt --upgrade
+
+# 3. Протестируйте приложение
+python -c "from app.main import app; print('✅ Успех')"
+```
+
+### Проверка Docker
+
+```bash
+# Установка Docker (Arch Linux)
+sudo pacman -S docker docker-compose
+sudo systemctl enable --now docker
+sudo usermod -aG docker $USER
+
+# Сборка и запуск
+docker-compose up --build
+```
+
+## 🆘 Поддержка
+
+Если у вас продолжаются проблемы:
+
+1. Проверьте логи в панели вывода вашей IDE
+2. Запустите скрипт настройки: `./setup_dev.sh`
+3. Проверьте путь к Python интерпретатору в вашей IDE
+4. Протестируйте с помощью health check endpoint
