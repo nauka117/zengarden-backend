@@ -32,7 +32,7 @@ async def create_flower(
     db.add(db_flower)
     db.commit()
     db.refresh(db_flower)
-    return db_flower
+    return FlowerSchema.from_orm(db_flower)
 
 @router.put("/{flower_id}", response_model=FlowerSchema)
 async def update_flower(
@@ -70,7 +70,7 @@ async def update_flower(
     
     db.commit()
     db.refresh(db_flower)
-    return db_flower
+    return FlowerSchema.from_orm(db_flower)
 
 @router.delete("/{flower_id}")
 async def delete_flower(
@@ -101,4 +101,4 @@ async def get_flowers(
     db: Session = Depends(get_db)
 ):
     flowers = db.query(Flower).filter(Flower.owner_id == current_user.id).all()
-    return flowers 
+    return [FlowerSchema.from_orm(f) for f in flowers] 

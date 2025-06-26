@@ -22,5 +22,25 @@ class Flower(FlowerBase):
     id: int
     owner_id: int
 
+    @classmethod
+    def from_orm(cls, obj):
+        # Собираем temperature_range из полей ORM-модели
+        temperature_range = None
+        if hasattr(obj, 'temperature_min') and hasattr(obj, 'temperature_max'):
+            if obj.temperature_min is not None or obj.temperature_max is not None:
+                temperature_range = TemperatureRange(
+                    min=obj.temperature_min,
+                    max=obj.temperature_max
+                )
+        return cls(
+            id=obj.id,
+            owner_id=obj.owner_id,
+            name=obj.name,
+            watering_intensity=obj.watering_intensity,
+            light_level=obj.light_level,
+            temperature_range=temperature_range,
+            comment=obj.comment
+        )
+
     class Config:
         from_attributes = True 
