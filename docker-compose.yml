@@ -9,8 +9,10 @@ services:
       - PYTHONPATH=/app
       - SQLALCHEMY_DATABASE_URL=sqlite:///./flowers.db
     volumes:
-      # Mount the database file for persistence
-      - database_data:/app
+      # Mount only the database file for persistence
+      - ./flowers.db:/app/flowers.db
+      # Mount app directory for development (uncomment for development)
+      - ./app:/app/app
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
