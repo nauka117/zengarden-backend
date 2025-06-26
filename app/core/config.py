@@ -1,4 +1,5 @@
 from pydantic_settings import BaseSettings
+import os
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "Flower Planning Backend"
@@ -11,9 +12,12 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     
     # Database
-    SQLALCHEMY_DATABASE_URL: str = "sqlite:///./flowers.db"
+    SQLALCHEMY_DATABASE_URL: str = "sqlite:///./data/flowers.db"
 
     class Config:
         case_sensitive = True
 
-settings = Settings() 
+settings = Settings()
+
+# Ensure data directory exists
+os.makedirs("./data", exist_ok=True) 

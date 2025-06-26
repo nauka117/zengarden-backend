@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   api:
     build: .
@@ -7,11 +5,11 @@ services:
       - "8000:8000"
     environment:
       - PYTHONPATH=/app
-      - SQLALCHEMY_DATABASE_URL=sqlite:///./flowers.db
+      - SQLALCHEMY_DATABASE_URL=sqlite:///./data/flowers.db
     volumes:
-      # Mount only the database file for persistence
-      - ./flowers.db:/app/flowers.db
-      # Mount app directory for development (uncomment for development)
+      # Mount data directory for database persistence
+      - database_data:/app/data
+      # Mount app directory for development
       - ./app:/app/app
     restart: unless-stopped
     healthcheck:
